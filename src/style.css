@@ -1,0 +1,9 @@
+.info {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.info-item {
+  height: 20px;
+}

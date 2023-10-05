@@ -12,27 +12,51 @@ import axios from 'axios';
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY_API = '39839369-8c713c9a2c0ac40d1d76da13a';
 
-const elForm = document.querySelector(".search-form");
+const elForm = document.querySelector('.search-form');
+const elGallery = document.querySelector('.gallery');
 
 elForm.addEventListener('submit', onClickSearch);
 
 //Объвление асинхронной функции
- const fetchSearchPhoto = async (input) => {
-        const response = await axios.get(`${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo`);
+const fetchSearchPhoto = async input => {
+  const response = await axios.get(
+    `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo`
+  );
   const photos = await response.data.hits;
-     //return { webformatURL, largeImageURL, tags, likes, views, comments, downloads} = photos;
-     return photos;
-    }
+  return (photoCard = photos.map(photo => {
+    return `<div class="photo-card">
+        <img src="${photo.webformatURL}" alt="${photo.tags}" loading="lazy" />
+        <div class="info">
+          <p class="info-item">
+            <b>Likes</b>
+            <span>${photo.likes}</span>
+          </p>
+          <p class="info-item">
+            <b>Views</b>
+            <span>${photo.views}</span>
+          </p>
+          <p class="info-item">
+            <b>Comments</b>
+            <span>${photo.comments}</span>
+          </p>
+          <p class="info-item">
+            <b>Downloads</b>
+            <span>${photo.downloads}</span>
+          </p>
+        </div>
+      </div>`;
+  }));
+  //{ webformatURL, largeImageURL, tags, likes, views, comments, downloads } = photos;
+  return photoCard;
+};
 
-function onClickSearch(event)
-{
-    event.preventDefault();
-    const form = event.currentTarget;
-    const input = form.elements.searchQuery.value;
-    //console.log(input);
+function onClickSearch(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const input = form.elements.searchQuery.value;
+  //console.log(input);
 
-   fetchSearchPhoto(input).then(photos => console.log(photos));
-
+  fetchSearchPhoto(input).then(photos =>
+    elGallery.insertAdjacentHTML('beforeend', photos)
+  );
 }
-
-
