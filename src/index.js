@@ -27,7 +27,7 @@ elBtn.addEventListener('click', onLoadMore);
 
 //Объвление асинхронной функции
 const fetchSearchPhoto = async (input, page) => {
-  console.log(page);
+  console.log(`Text= ${input} page=${page}`);
   const response = await axios.get(
     `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${IMG_KOL}&page=${page}`
   );
@@ -93,7 +93,7 @@ function onLoadMore(event) {
   console.log(pageNum++);
   localStorage.setItem('gallery-page-num', pageNum);
 
-  fetchSearchPhoto(inputText, pageNum++).then(photos =>
+  fetchSearchPhoto(inputText.value, pageNum++).then(photos =>
     elGallery.insertAdjacentHTML('beforeend', photos)
   );
 }
