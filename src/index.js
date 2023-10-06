@@ -68,6 +68,7 @@ function onClickSearch(event) {
   const input = form.elements.searchQuery.value;
   //console.log(input);
 
+  // Удаляем предыдущие картинки
   if (document.querySelectorAll('.photo-card').length > 0)
     for (const variable of document.querySelectorAll('.photo-card')) {
       // тіло циклу
