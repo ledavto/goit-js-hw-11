@@ -8,6 +8,7 @@
 
 import Notiflix from 'notiflix';
 import axios from 'axios';
+import { galleryItems } from './gallery-items.js';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY_API = '39839369-8c713c9a2c0ac40d1d76da13a';
@@ -23,9 +24,10 @@ const fetchSearchPhoto = async input => {
     `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo`
   );
   const photos = await response.data.hits;
-  return (photoCard = photos.map(photo => {
-    return `<div class="photo-card">
-        <img src="${photo.webformatURL}" alt="${photo.tags}" loading="lazy" />
+  return (photoCard = photos
+    .map(photo => {
+      return `<div class="photo-card">
+        <a class="gallery__link" href="${photo.largeImageURL}"> <img src="${photo.webformatURL}" alt="${photo.tags}" height="200" loading="lazy" /></a>
         <div class="info">
           <p class="info-item">
             <b>Likes</b>
@@ -45,7 +47,8 @@ const fetchSearchPhoto = async input => {
           </p>
         </div>
       </div>`;
-  }));
+    })
+    .join(''));
   //{ webformatURL, largeImageURL, tags, likes, views, comments, downloads } = photos;
   return photoCard;
 };
@@ -60,3 +63,8 @@ function onClickSearch(event) {
     elGallery.insertAdjacentHTML('beforeend', photos)
   );
 }
+
+// new SimpleLightbox('.gallery a', {
+//   captionsData: 'alt',
+//   captionDelay: 250,
+// });

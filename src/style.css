@@ -1,6 +1,17 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.photo-card {
+  width: 30%;
+  align-self: center;
+}
+
 .info {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 15px;
 }
 
