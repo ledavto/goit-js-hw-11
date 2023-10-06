@@ -1,6 +1,8 @@
 // npm install axios
 // npm install slim-select
 // npm i notiflix
+// npm install simplelightbox
+
 // https://pixabay.com/api/docs/
 // 39839369-8c713c9a2c0ac40d1d76da13a
 
@@ -10,6 +12,7 @@ import Notiflix from 'notiflix';
 import axios from 'axios';
 
 import SimpleLightbox from 'simplelightbox';
+
 // Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -31,12 +34,28 @@ const fetchSearchPhoto = async (input, page) => {
   const response = await axios.get(
     `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${IMG_KOL}&page=${page}`
   );
+
+
   const photos = await response.data.hits;
-  const totalImg = await console.log(response.data.totalHits);
+
+  const totalImg = await response.data.totalHits;
+  //console.log(totalImg);
+  
+  //Выводим сообщение о найденных FOTO
+  if (totalImg > IMG_KOL * page) {
+    Notiflix.Notify.success(`Hooray! We found ${page * IMG_KOL} of ${totalImg} images.`);
+    elBtn.disabled = false;
+  }
+  else {
+    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+    elBtn.disabled = true;
+  }
+  
   return (photoCard = photos
     .map(photo => {
-      return `<div class="photo-card">
-        <a class="gallery__link" href="${photo.largeImageURL}"> <img src="${photo.webformatURL}" alt="${photo.tags}" height="200" loading="lazy" /></a>
+      return `<a class="gallery__link" href="${photo.largeImageURL}">
+      <div class="photo-card">
+         <img src="${photo.webformatURL}" alt="${photo.tags}" height="200" loading="lazy" />
         <div class="info">
           <p class="info-item">
             <b>Likes</b>
@@ -55,7 +74,7 @@ const fetchSearchPhoto = async (input, page) => {
             <span>${photo.downloads}</span>
           </p>
         </div>
-      </div>`;
+      </div></a>`;
     })
     .join(''));
   //{ webformatURL, largeImageURL, tags, likes, views, comments, downloads } = photos;
@@ -64,6 +83,7 @@ const fetchSearchPhoto = async (input, page) => {
 
 function onClickSearch(event) {
   event.preventDefault();
+  
   const form = event.currentTarget;
   const input = form.elements.searchQuery.value;
   //console.log(input);
@@ -88,12 +108,15 @@ function onLoadMore(event) {
   //const form = event.currentTarget;
   const inputText = document.querySelector('input');
 
-  console.log(inputText.value);
-  pageNum = localStorage.getItem('gallery-page-num');
-  console.log(pageNum++);
-  localStorage.setItem('gallery-page-num', pageNum);
+  //console.log(inputText.value);
+  const getPageNum = Number(localStorage.getItem('gallery-page-num'))+1;
+  
+  console.log(getPageNum);
+  localStorage.setItem('gallery-page-num', getPageNum);
 
-  fetchSearchPhoto(inputText.value, pageNum++).then(photos =>
+
+
+  fetchSearchPhoto(inputText.value, getPageNum).then(photos =>
     elGallery.insertAdjacentHTML('beforeend', photos)
   );
 }
