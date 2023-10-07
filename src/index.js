@@ -16,6 +16,11 @@ import SimpleLightbox from 'simplelightbox';
 // Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+let gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY_API = '39839369-8c713c9a2c0ac40d1d76da13a';
 const IMG_KOL = 40;
@@ -99,7 +104,10 @@ function onClickSearch(event) {
   localStorage.setItem('gallery-page-num', 1);
 
   fetchSearchPhoto(input, pageNum).then(photos =>
-    elGallery.insertAdjacentHTML('beforeend', photos)
+  {
+    elGallery.insertAdjacentHTML('beforeend', photos);
+    gallery.refresh();
+}
   );
 }
 
@@ -121,7 +129,4 @@ function onLoadMore(event) {
   );
 }
 
-// new SimpleLightbox('.gallery a', {
-//   captionsData: 'alt',
-//   captionDelay: 250,
-// });
+
