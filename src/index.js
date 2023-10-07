@@ -27,6 +27,7 @@ const IMG_KOL = 40;
 let pageNum = 1;
 
 const elForm = document.querySelector('.search-form');
+const contLoadMore = document.querySelector('.container-load-more');
 const elBtn = document.querySelector('.load-more');
 const elGallery = document.querySelector('.gallery');
 
@@ -49,33 +50,33 @@ const fetchSearchPhoto = async (input, page) => {
   //Выводим сообщение о найденных FOTO
   if (totalImg > IMG_KOL * page) {
     Notiflix.Notify.success(`Hooray! We found ${page * IMG_KOL} of ${totalImg} images.`);
-    elBtn.disabled = false;
+    contLoadMore.style.display = 'flex';
   }
   else {
     Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
-    elBtn.disabled = true;
+    contLoadMore.style.display = 'none';
   }
   
   return (photoCard = photos
     .map(photo => {
       return `<a class="gallery__link" href="${photo.largeImageURL}">
       <div class="photo-card">
-         <img src="${photo.webformatURL}" alt="${photo.tags}" height="200" loading="lazy" />
+         <img class="gallery-image" src="${photo.webformatURL}" alt="${photo.tags}" height="200" loading="lazy" />
         <div class="info">
           <p class="info-item">
-            <b>Likes</b>
+            <b>Likes</b><br>
             <span>${photo.likes}</span>
           </p>
           <p class="info-item">
-            <b>Views</b>
+            <b>Views</b><br>
             <span>${photo.views}</span>
           </p>
           <p class="info-item">
-            <b>Comments</b>
+            <b>Comments</b><br>
             <span>${photo.comments}</span>
           </p>
           <p class="info-item">
-            <b>Downloads</b>
+            <b>Downloads</b><br>
             <span>${photo.downloads}</span>
           </p>
         </div>
@@ -94,8 +95,8 @@ function onClickSearch(event) {
   //console.log(input);
 
   // Удаляем предыдущие картинки
-  if (document.querySelectorAll('.photo-card').length > 0)
-    for (const variable of document.querySelectorAll('.photo-card')) {
+  if (document.querySelectorAll('.gallery__link').length > 0)
+    for (const variable of document.querySelectorAll('.gallery__link')) {
       // тіло циклу
       variable.remove();
     }
