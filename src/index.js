@@ -27,6 +27,7 @@ const IMG_KOL = 40;
 let pageNum = 1;
 
 const elForm = document.querySelector('.search-form');
+const inputText = document.querySelector('input');
 const contLoadMore = document.querySelector('.container-load-more');
 const elBtn = document.querySelector('.load-more');
 const elGallery = document.querySelector('.gallery');
@@ -36,16 +37,14 @@ elBtn.addEventListener('click', onLoadMore);
 
 //Объвление асинхронной функции
 const fetchSearchPhoto = async (input, page) => {
-  console.log(`Text= ${input} page=${page}`);
+ // console.log(`Text= ${input} page=${page}`);
   const response = await axios.get(
     `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${IMG_KOL}&page=${page}`
   );
 
-
   const photos = await response.data.hits;
 
   const totalImg = await response.data.totalHits;
-  //console.log(totalImg);
   
   //Выводим сообщение о найденных FOTO
   if (totalImg > IMG_KOL * page) {
@@ -89,10 +88,6 @@ const fetchSearchPhoto = async (input, page) => {
 
 function onClickSearch(event) {
   event.preventDefault();
-  
-  const form = event.currentTarget;
-  const input = form.elements.searchQuery.value;
-  //console.log(input);
 
   // Удаляем предыдущие картинки
   if (document.querySelectorAll('.gallery__link').length > 0)
@@ -101,10 +96,9 @@ function onClickSearch(event) {
       variable.remove();
     }
 
-  localStorage.setItem('gallery-input-str', input);
-  localStorage.setItem('gallery-page-num', 1);
+  pageNum = 1;
 
-  fetchSearchPhoto(input, pageNum).then(photos =>
+  fetchSearchPhoto(inputText.value, pageNum).then(photos =>
   {
     elGallery.insertAdjacentHTML('beforeend', photos);
     gallery.refresh();
@@ -113,19 +107,12 @@ function onClickSearch(event) {
 }
 
 function onLoadMore(event) {
-  //event.preventDefault();
-  //const form = event.currentTarget;
-  const inputText = document.querySelector('input');
 
-  //console.log(inputText.value);
-  const getPageNum = Number(localStorage.getItem('gallery-page-num'))+1;
+  pageNum = pageNum + 1;
   
-  console.log(getPageNum);
-  localStorage.setItem('gallery-page-num', getPageNum);
+ // console.log(`Text= ${inputText.value} page=${pageNum}`);
 
-
-
-  fetchSearchPhoto(inputText.value, getPageNum).then(photos =>
+  fetchSearchPhoto(inputText.value, pageNum).then(photos =>
     elGallery.insertAdjacentHTML('beforeend', photos)
   );
 }
