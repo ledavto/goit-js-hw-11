@@ -110,12 +110,16 @@ function onClickSearch(event) {
         .firstElementChild.getBoundingClientRect();
       
       console.log(document.documentElement.scrollHeight);
-      console.log(document.documentElement.scrollTop);
+      console.log(document.documentElement.scrollTop+document.documentElement.clientHeight);
+      //console.log(document.documentElement.clientHeight);
+
+      if (document.documentElement.scrollTop+document.documentElement.clientHeight >=document.documentElement.scrollHeight) clearInterval(timerId);
     window.scrollBy({
   top: cardHeight * 2,
   behavior: "smooth",
 });
   }, 2000);
+    
     
 }
   );
