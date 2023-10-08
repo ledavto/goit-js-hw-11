@@ -32,6 +32,7 @@ const contLoadMore = document.querySelector('.container-load-more');
 const elBtn = document.querySelector('.load-more');
 const elGallery = document.querySelector('.gallery');
 
+
 elForm.addEventListener('submit', onClickSearch);
 elBtn.addEventListener('click', onLoadMore);
 
@@ -102,11 +103,26 @@ function onClickSearch(event) {
   {
     elGallery.insertAdjacentHTML('beforeend', photos);
     gallery.refresh();
+
+    timerId = setInterval(() => {
+      const { height: cardHeight } = document
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
+      
+      console.log(document.documentElement.scrollHeight);
+      console.log(document.documentElement.scrollTop);
+    window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
+  }, 2000);
+    
 }
   );
 }
 
 function onLoadMore(event) {
+  contLoadMore.style.display = 'none';
 
   pageNum = pageNum + 1;
   
