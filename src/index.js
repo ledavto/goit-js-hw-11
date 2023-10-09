@@ -122,6 +122,9 @@ function onClickSearch(event) {
       )
         clearInterval(timerId);
 
+      elGallery.addEventListener('click', () => {
+        clearInterval(timerId);
+      });
       window.scrollBy({
         top: cardHeight * 2,
         behavior: 'smooth',
