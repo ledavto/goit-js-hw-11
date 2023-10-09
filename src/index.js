@@ -32,13 +32,12 @@ const contLoadMore = document.querySelector('.container-load-more');
 const elBtn = document.querySelector('.load-more');
 const elGallery = document.querySelector('.gallery');
 
-
 elForm.addEventListener('submit', onClickSearch);
 elBtn.addEventListener('click', onLoadMore);
 
 //Объвление асинхронной функции
 const fetchSearchPhoto = async (input, page) => {
- // console.log(`Text= ${input} page=${page}`);
+  // console.log(`Text= ${input} page=${page}`);
   const response = await axios.get(
     `${BASE_URL}?key=${KEY_API}&q=${input}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${IMG_KOL}&page=${page}`
   );
@@ -46,18 +45,21 @@ const fetchSearchPhoto = async (input, page) => {
   const photos = await response.data.hits;
 
   const totalImg = await response.data.totalHits;
-  
+
   //Выводим сообщение о найденных FOTO
   if (totalImg > IMG_KOL * page) {
-    Notiflix.Notify.success(`Hooray! We found ${page * IMG_KOL} of ${totalImg} images.`);
+    Notiflix.Notify.success(
+      `Hooray! We found ${page * IMG_KOL} of ${totalImg} images.`
+    );
     contLoadMore.style.display = 'flex';
-  }
-  else {
-    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+  } else {
+    Notiflix.Notify.failure(
+      "We're sorry, but you've reached the end of search results."
+    );
     contLoadMore.style.display = 'none';
   }
-  
-  return (photoCard = photos
+
+  const photoCard = photos
     .map(photo => {
       return `<a class="gallery__link" href="${photo.largeImageURL}">
       <div class="photo-card">
@@ -82,7 +84,7 @@ const fetchSearchPhoto = async (input, page) => {
         </div>
       </div></a>`;
     })
-    .join(''));
+    .join('');
   //{ webformatURL, largeImageURL, tags, likes, views, comments, downloads } = photos;
   return photoCard;
 };
@@ -99,42 +101,41 @@ function onClickSearch(event) {
 
   pageNum = 1;
 
-  fetchSearchPhoto(inputText.value, pageNum).then(photos =>
-  {
+  fetchSearchPhoto(inputText.value, pageNum).then(photos => {
     elGallery.insertAdjacentHTML('beforeend', photos);
     gallery.refresh();
 
     timerId = setInterval(() => {
       const { height: cardHeight } = document
-        .querySelector(".gallery")
+        .querySelector('.gallery')
         .firstElementChild.getBoundingClientRect();
-      
+
       //console.log(document.documentElement.scrollHeight); // полный размер с учётом прокрутки
       //console.log(document.documentElement.scrollTop); // Текущее положение прокрутки
       //console.log(document.documentElement.clientHeight); //Видимая часть
 
-      if (document.documentElement.scrollTop+document.documentElement.clientHeight >=document.documentElement.scrollHeight) clearInterval(timerId);
-    window.scrollBy({
-  top: cardHeight * 2,
-  behavior: "smooth",
-});
-  }, 2000);
-    
-    
-}
-  );
+      if (
+        document.documentElement.scrollTop +
+          document.documentElement.clientHeight >=
+        document.documentElement.scrollHeight
+      )
+        clearInterval(timerId);
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+    }, 2000);
+  });
 }
 
 function onLoadMore(event) {
   contLoadMore.style.display = 'none';
 
   pageNum = pageNum + 1;
-  
- // console.log(`Text= ${inputText.value} page=${pageNum}`);
+
+  // console.log(`Text= ${inputText.value} page=${pageNum}`);
 
   fetchSearchPhoto(inputText.value, pageNum).then(photos =>
     elGallery.insertAdjacentHTML('beforeend', photos)
   );
 }
-
-
