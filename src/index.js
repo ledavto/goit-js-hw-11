@@ -116,10 +116,12 @@ function onClickSearch(event) {
 
       if (
         document.documentElement.scrollTop +
-          document.documentElement.clientHeight >=
+          document.documentElement.clientHeight +
+          100 >=
         document.documentElement.scrollHeight
       )
         clearInterval(timerId);
+
       window.scrollBy({
         top: cardHeight * 2,
         behavior: 'smooth',
