@@ -110,9 +110,9 @@ function onClickSearch(event) {
         .querySelector('.gallery')
         .firstElementChild.getBoundingClientRect();
 
-      console.log(document.documentElement.scrollHeight); // полный размер с учётом прокрутки
-      console.log(document.documentElement.scrollTop); // Текущее положение прокрутки
-      console.log(document.documentElement.clientHeight); //Видимая часть
+      // console.log(document.documentElement.scrollHeight); // полный размер с учётом прокрутки
+      // console.log(document.documentElement.scrollTop); // Текущее положение прокрутки
+      // console.log(document.documentElement.clientHeight); //Видимая часть
 
       if (
         document.documentElement.scrollTop +
