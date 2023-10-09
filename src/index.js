@@ -105,7 +105,7 @@ function onClickSearch(event) {
     elGallery.insertAdjacentHTML('beforeend', photos);
     gallery.refresh();
 
-    timerId = setInterval(() => {
+    const timerId = setInterval(() => {
       const { height: cardHeight } = document
         .querySelector('.gallery')
         .firstElementChild.getBoundingClientRect();
